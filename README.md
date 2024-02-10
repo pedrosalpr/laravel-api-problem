@@ -1,75 +1,181 @@
-# :package_description
+# Laravel Api Problem
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/pedrosalpr/laravel-api-problem.svg?style=flat-square)](https://packagist.org/packages/pedrosalpr/laravel-api-problem)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/pedrosalpr/laravel-api-problem/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/pedrosalpr/laravel-api-problem/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/pedrosalpr/laravel-api-problem/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/pedrosalpr/laravel-api-problem/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/pedrosalpr/laravel-api-problem.svg?style=flat-square)](https://packagist.org/packages/pedrosalpr/laravel-api-problem)
 
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+The objective of this package is to facilitate error outputs from API requests in accordance with the [RFC 9457](https://datatracker.ietf.org/doc/rfc9457/) standard.
 
-## Support us
+It transforms error outputs into json format with the following characteristics:
+- header:
+    - `Content-Type: application/problem+json`
+- response:
+    - `type`: URI that identifies the type of error that occured, for example `https://example.com/validation-error`.
+    - `title`: Human-readable identifier, usually the same type field should have the same title field alongside. An example would be something like Form validation failed.
+    - `status`: A copy of the HTTP status code.
+    - `detail`: More information about the specific problem, and if it's appropriate also steps to correct it. For example information about a form validation problem Username is already taken, please choose a different username.
+    - `instance`: An identifier for this specific occurence, which may not be useful to the client but may be included in a bug report for example.
+    - **Additional fields**: Any fields may be added to give additional information, and consuming clients are expected to ignore any that they don't have specific support for.
+        - `timestamp`: (RFC 9457 enhancement): A timestamp indicating when the problem was generated. This helps in logging and tracing the error, especially in systems where timing is critical.
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
+Example:
 
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+Server Response:
+```bash
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/problem+json
+Content-Language: en
+{
+     "status": 422,
+     "type": "https://example.test/validation-error",
+     "title": "Form validation failed",
+     "detail": "One or more fields have validation errors. Please check and try again.",
+     "instance": "http://example.test/api/test/1",
+     "timestamp": "2024-02-09T11:55:51.252968Z",
+     "errors": [
+        {
+            "name": "username",
+            "reason": "Username is already taken."
+        },
+        {
+            "name": "email",
+            "reason": "Email format is invalid."
+        }
+    ]
+}
+```
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
+composer require pedrosalpr/laravel-api-problem
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag=":package_slug-views"
-```
+> Only works in Laravel 9 and 10.
 
 ## Usage
 
+### Default Mode
+
+To use it, just go to the `register` method within `Exceptions\Handler.php` and add the following code:
+
 ```php
-$variable = new VendorName\Skeleton();
-echo $variable->echoPhrase('Hello, VendorName!');
+use Pedrosalpr\LaravelApiProblem\LaravelApiProblem;
+
+public function register(): void
+{
+    ...
+
+    $this->renderable(function (\Throwable $e, Request $request) {
+        if ($request->is('api/*') || $this->shouldReturnJson($request, $e)) {
+            $apiProblem = new LaravelApiProblem($e, $request);
+            return $apiProblem->render();
+        }
+    });
+}
+```
+
+If you want to debug, just add the following line before the return:
+
+`dd($apiProblem->toDebuggableArray());`
+
+#### Creating Exceptions in the Api Problem pattern
+
+There is the possibility of creating exceptions that extend `LaravelApiProblemException`.
+
+This already makes it easier to transform the exception into the Api Problem pattern.
+
+To do this, simply run the following command:
+
+`php artisan laravel-api-problem:exception {name}`
+
+For example: 
+
+`php artisan laravel-api-problem:exception DummyException`
+
+This creates a class exception inside `Exceptions\ApiProblem`;
+
+```php
+<?php
+
+namespace App\Exceptions\ApiProblem;
+
+use Pedrosalpr\LaravelApiProblem\Exceptions\LaravelApiProblemException;
+
+class DummyException extends LaravelApiProblemException
+{
+
+}
+```
+
+### Custom Mode
+
+If you want to customize an `Api Problem` class to add your guidelines for which error responses should be returned, simply extend the class with the following command:
+
+`php artisan laravel-api-problem:extend`
+
+For example:
+
+`php artisan laravel-api-problem:extend DummyApiProblem`
+
+This creates a class Api Problem inside `ApiProblem`;
+
+```php
+<?php
+
+namespace App\ApiProblem;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Pedrosalpr\LaravelApiProblem\Http\LaravelHttpApiProblem;
+use Pedrosalpr\LaravelApiProblem\LaravelApiProblem;
+
+class DummyApiProblem extends LaravelApiProblem
+{
+    public function __construct(
+        protected \Throwable $exception,
+        protected Request $request
+    ) {
+        match (get_class($exception)) {
+            \Exception::class => $this->dummy(),
+            default => parent::__construct($exception, $request)
+        };
+    }
+
+    protected function dummy()
+    {
+        $extensions = [
+            'errors' => "Dummy",
+        ];
+        $this->apiProblem = new LaravelHttpApiProblem(
+            Response::HTTP_I_AM_A_TEAPOT,
+            $this->exception->getMessage(),
+            $this->getUriInstance(),
+            $extensions
+        );
+    }
+}
+```
+
+And within the match, add the names of the exceptions classes with their respective methods, such as `dummy()`.
+
+And in the `Handler.php` file replace the `LaravelApiProblem` object instance to `DummyApiProblem`.
+
+```php
+    $this->renderable(function (\Throwable $e, Request $request) {
+        if ($request->is('api/*') || $this->shouldReturnJson($request, $e)) {
+            $apiProblem = new DummyApiProblem($e, $request);
+            return $apiProblem->render();
+        }
+    });
 ```
 
 ## Testing
 
-```bash
-composer test
-```
+TODO
 
 ## Changelog
 
@@ -85,7 +191,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [Leandro Pedrosa Rodrigues](https://github.com/pedrosalpr)
 - [All Contributors](../../contributors)
 
 ## License
