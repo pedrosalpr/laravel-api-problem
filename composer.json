@@ -1,6 +1,7 @@
 {
     "name": "pedrosalpr/laravel-api-problem",
     "description": "This is my package laravel-api-problem",
+    "version": "0.0.0",
     "keywords": [
         "pedrosalpr",
         "laravel",
