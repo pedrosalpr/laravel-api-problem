@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Validate Branch Name"
+
+# Get the name of the branch that was created
+npx validate-branch-name
+
+echo "Verificando os arquivos em staged se está de acordo com a configuração do PHP CS Fixer"
+composer lint-diff-staged
