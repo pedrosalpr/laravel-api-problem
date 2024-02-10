@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.2](https://github.com/pedrosalpr/laravel-api-problem/0.0.1...0.0.2) (2024-02-10)
+
+
+### Chore
+
+* **composer.json:** change minimum-stability for stable ([5ce2401](https://github.com/pedrosalpr/laravel-api-problem/commit/5ce2401a5a704fd88d43b8d184574d42707b7494))
+
 ## 0.0.1 (2024-02-10)
 
 
