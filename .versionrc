@@ -1,0 +1,27 @@
+{
+    "types": [
+        { "type": "feat", "section": "Features" },
+        { "type": "fix", "section": "Bug Fixes" },
+        { "type": "chore", "section": "Chore" },
+        { "type": "build", "section": "Build" },
+        { "type": "docs", "section": "Docs" },
+        { "type": "style", "section": "Style" },
+        { "type": "refactor", "section": "Refactor" },
+        { "type": "perf", "section": "Performance" },
+        { "type": "test", "section": "Test" }
+    ],
+    "commitUrlFormat": "{{host}}/{{owner}}/{{repository}}/commit/{{hash}}",
+    "compareUrlFormat": "{{host}}/{{owner}}/{{repository}}/{{previousTag}}...{{currentTag}}",
+    "issueUrlFormat": "{{host}}/{{owner}}/{{repository}}/issues/{{id}}",
+    "noVerify": true,
+    "infile": "CHANGELOG.md",
+    "silent": false,
+    "tagPrefix": "",
+    "dryRun": false,
+    "bumpFiles": [
+        {
+            "filename": "composer.json",
+            "updater": "ctv-updater"
+        }
+    ]
+}

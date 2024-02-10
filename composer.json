@@ -1,26 +1,27 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "pedrosalpr/laravel-api-problem",
+    "description": "This is my package laravel-api-problem",
     "keywords": [
-        ":vendor_name",
+        "pedrosalpr",
         "laravel",
-        ":package_slug"
+        "laravel-api-problem"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/pedrosalpr/laravel-api-problem",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Leandro Pedrosa Rodrigues",
+            "email": "pedrosalpr@gmail.com",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.1",
-        "spatie/laravel-package-tools": "^1.14.0",
-        "illuminate/contracts": "^10.0"
+        "illuminate/contracts": "^10.0",
+        "spatie/laravel-package-tools": "^1.14.0"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.47",
         "laravel/pint": "^1.0",
         "nunomaduro/collision": "^7.8",
         "larastan/larastan": "^2.0.1",
@@ -35,19 +36,17 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Pedrosalpr\\LaravelApiProblem\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/",
-            "Workbench\\App\\": "workbench/app/"
+            "Pedrosalpr\\LaravelApiProblem\\Tests\\": "tests/"
         }
     },
     "scripts": {
         "post-autoload-dump": "@composer run prepare",
-        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "clear": "@php vendor/bin/testbench package:purge-laravel-api-problem --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "build": [
             "@composer run prepare",
@@ -61,7 +60,11 @@
         "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage",
-        "format": "vendor/bin/pint"
+        "format": "vendor/bin/pint",
+        "lint-diff": "vendor/bin/php-cs-fixer fix -vvv --config .php-cs-fixer.php --dry-run --using-cache no --path-mode=intersection $(git diff --name-only --diff-filter=ACMRTUXB | grep .php)",
+        "lint-diff-staged": "vendor/bin/php-cs-fixer fix -vvv --config .php-cs-fixer.php --dry-run --using-cache no --path-mode=intersection $(git diff --name-only --staged --diff-filter=ACMRTUXB | grep .php)",
+        "lint-fix": "vendor/bin/php-cs-fixer fix -vvv --config .php-cs-fixer.php --using-cache no --path-mode=intersection $(git diff --name-only --diff-filter=ACMRTUXB | grep .php)",
+        "lint-fix-staged": "vendor/bin/php-cs-fixer fix -vvv --config .php-cs-fixer.php --using-cache no --path-mode=intersection $(git diff --name-only --staged --diff-filter=ACMRTUXB | grep .php)"
     },
     "config": {
         "sort-packages": true,
@@ -73,10 +76,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Pedrosalpr\\LaravelApiProblem\\LaravelApiProblemServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "LaravelApiProblem": "Pedrosalpr\\LaravelApiProblem\\Facades\\LaravelApiProblem"
             }
         }
     },

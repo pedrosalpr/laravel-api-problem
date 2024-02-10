@@ -1,0 +1,32 @@
+{
+    "name": "laravel-api-problem",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:pedrosalpr/laravel-api-problem.git"
+    },
+    "scripts": {
+        "prepare": "husky install",
+        "commit": "git-cz"
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^18.6.0",
+        "@commitlint/config-conventional": "^18.6.0",
+        "commit-and-tag-version": "^12.2.0",
+        "commitizen": "^4.3.0",
+        "cz-conventional-changelog": "^3.3.0",
+        "git-conventional-commits": "^2.6.7",
+        "husky": "^9.0.10",
+        "stringify-package": "^1.0.1",
+        "validate-branch-name": "^1.3.0"
+    },
+    "config": {
+        "commitizen": {
+            "path": "cz-conventional-changelog"
+        }
+    },
+    "validate-branch-name": {
+        "pattern": "^(main|develop){1}$|^((hotfix|fix|feature|build|ci|docs|performance|refactor|release|style|test|chore|expiremental|poc)/(([A-Z]{2,10}-[0-9]+)(-[a-z]+)*|([a-z]+(-[a-z]+)*)))$",
+        "errorMsg": "Branch name is invalid. The branch name must follow the standard defined in the RFC"
+    }
+}
