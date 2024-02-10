@@ -1,0 +1,34 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Pedrosalpr\LaravelApiProblem\Http\LaravelHttpApiProblem;
+use Pedrosalpr\LaravelApiProblem\LaravelApiProblem;
+
+class {{ class }} extends LaravelApiProblem
+{
+    public function __construct(
+        protected \Throwable $exception,
+        protected Request $request
+    ) {
+        match (get_class($exception)) {
+            \Exception::class => $this->dummy(),
+            default => parent::__construct($exception, $request)
+        };
+    }
+
+    protected function dummy()
+    {
+        $extensions = [
+            'errors' => "Dummy",
+        ];
+        $this->apiProblem = new LaravelHttpApiProblem(
+            Response::HTTP_I_AM_A_TEAPOT,
+            $this->exception->getMessage(),
+            $this->getUriInstance(),
+            $extensions
+        );
+    }
+}
