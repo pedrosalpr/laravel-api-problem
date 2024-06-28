@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.3](https://github.com/pedrosalpr/laravel-api-problem/0.0.2...0.0.3) (2024-06-28)
+
+
+### Chore
+
+* **deps:** bump aglipanci/laravel-pint-action from 2.3.1 to 2.4 ([03c7a4e](https://github.com/pedrosalpr/laravel-api-problem/commit/03c7a4e88eca93774fbcccfd49f646323d01f298))
+
+
+### Build
+
+* **composer.json:** accept version 11 of the illuminate/contracts package ([039eb51](https://github.com/pedrosalpr/laravel-api-problem/commit/039eb51eceb63d571f9c837f055b088a3d7c2d1f))
+
+
+### Docs
+
+* **readme:** add support in documentation for Laravel 11 ([a9fc7b3](https://github.com/pedrosalpr/laravel-api-problem/commit/a9fc7b3f6371c0c6252793620f8ee90a45ef35a6))
+
 ## [0.0.2](https://github.com/pedrosalpr/laravel-api-problem/0.0.1...0.0.2) (2024-02-10)
 
 
