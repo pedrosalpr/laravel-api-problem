@@ -54,11 +54,9 @@ You can install the package via composer:
 composer require pedrosalpr/laravel-api-problem
 ```
 
-> Only works in Laravel 9 and 10.
-
 ## Usage
 
-### Default Mode
+### Default Mode (Older Version Laravel 9 and 10)
 
 To use it, just go to the `register` method within `Exceptions\Handler.php` and add the following code:
 
@@ -81,6 +79,26 @@ public function register(): void
 If you want to debug, just add the following line before the return:
 
 `dd($apiProblem->toDebuggableArray());`
+
+### Default Mode (Laravel 11)
+
+To use it, add the following code to the Exception Closure in the `bootstrap/app.php` file:
+
+```php
+use Pedrosalpr\LaravelApiProblem\LaravelApiProblem;
+
+    ...
+
+    ->withExceptions(function (Exceptions $exceptions) {
+        $exceptions->render(function (\Throwable $e, Request $request) {
+            if ($request->is('api/*') || $this->shouldReturnJson($request, $e)) {
+                $apiProblem = new LaravelApiProblem($e, $request);
+                return $apiProblem->render();
+            }
+        });
+    })...
+
+```
 
 #### Creating Exceptions in the Api Problem pattern
 
@@ -162,7 +180,9 @@ class DummyApiProblem extends LaravelApiProblem
 
 And within the match, add the names of the exceptions classes with their respective methods, such as `dummy()`.
 
-And in the `Handler.php` file replace the `LaravelApiProblem` object instance to `DummyApiProblem`.
+#### Older Version Laravel 9 and 10
+
+In the `Handler.php` file replace the `LaravelApiProblem` object instance to `DummyApiProblem`.
 
 ```php
     $this->renderable(function (\Throwable $e, Request $request) {
@@ -171,6 +191,21 @@ And in the `Handler.php` file replace the `LaravelApiProblem` object instance to
             return $apiProblem->render();
         }
     });
+```
+
+#### Laravel 11
+
+Add the following code to the Exception Closure in the `bootstrap/app.php` file:
+
+```php
+    ->withExceptions(function (Exceptions $exceptions) {
+        $exceptions->render(function (\Throwable $e, Request $request) {
+            if ($request->is('api/*') || $this->shouldReturnJson($request, $e)) {
+                $apiProblem = new DummyApiProblem($e, $request);
+                return $apiProblem->render();
+            }
+        });
+    })
 ```
 
 ## Testing
