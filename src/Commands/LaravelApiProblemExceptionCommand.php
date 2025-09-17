@@ -24,7 +24,7 @@ class LaravelApiProblemExceptionCommand extends GeneratorCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__ . $stub;
+            : __DIR__.$stub;
     }
 
     protected function getDefaultNamespace($rootNamespace): string
@@ -34,7 +34,7 @@ class LaravelApiProblemExceptionCommand extends GeneratorCommand
 
     protected function replaceClass($stub, $name)
     {
-        $class = str_replace($this->getNamespace($name) . '\\', '', $name);
+        $class = str_replace($this->getNamespace($name).'\\', '', $name);
 
         // Do string replacement
         return str_replace('{{ class }}', $class, $stub);

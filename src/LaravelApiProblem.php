@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pedrosalpr\LaravelApiProblem;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -26,20 +27,20 @@ class LaravelApiProblem
         if ($exception instanceof LaravelApiProblemException) {
             $this->apiProblemException = $exception;
             $this->apiProblemException();
+
             return;
         }
         match (get_class($exception)) {
             ValidationException::class => $this->validation(),
             \UnhandledMatchError::class,\Exception::class => $this->default(),
             HttpException::class => $this->default(419),
+            AuthorizationException::class => $this->default(403),
             default => $this->default()
         };
     }
 
     /**
      * Render the exception as an HTTP response.
-     *
-     * @return JsonResponse
      */
     public function render(): JsonResponse
     {
@@ -54,8 +55,6 @@ class LaravelApiProblem
 
     /**
      * Debug the class in array to view more details, such as: api problem and exception
-     *
-     * @return array
      */
     public function toDebuggableArray(): array
     {
@@ -80,8 +79,6 @@ class LaravelApiProblem
 
     /**
      * Transform any exception into an http api problem with status code
-     *
-     * @param null|int $statusCode
      */
     protected function default(?int $statusCode = null): void
     {
@@ -103,7 +100,7 @@ class LaravelApiProblem
         $extensions = [
             'errors' => ($this->exception instanceof ValidationException)
                 ? $this->exception->errors()
-                : null
+                : null,
         ];
         $this->apiProblem = new LaravelHttpApiProblem(
             Response::HTTP_UNPROCESSABLE_ENTITY,
@@ -130,8 +127,6 @@ class LaravelApiProblem
 
     /**
      * Get uri as instance
-     *
-     * @return string
      */
     protected function getUriInstance(): string
     {
@@ -140,30 +135,25 @@ class LaravelApiProblem
 
     /**
      * Get the context if it exists within the exception and return it as an extension
-     *
-     * @return array
      */
     protected function getContextExceptionAsExtensions(): array
     {
         $extensions = [];
-        if (!method_exists($this->exception, 'context')) {
+        if (! method_exists($this->exception, 'context')) {
             return $extensions;
         }
         $context = $this->exception->context();
         if (is_array($context)) {
             $extensions = $context;
-        } elseif (!empty($context)) {
+        } elseif (! empty($context)) {
             $extensions = [$context];
         }
+
         return $extensions;
     }
 
     /**
      * Gets the status code from the exception code, or from the HttpException Interface, otherwise it returns an Internal Server Error
-     *
-     * @param null|int $code
-     *
-     * @return int
      */
     protected function getStatusCode(?int $code): int
     {
@@ -175,6 +165,7 @@ class LaravelApiProblem
                 ? $this->exception->getStatusCode()
                 : Response::HTTP_INTERNAL_SERVER_ERROR;
         }
+
         return ($this->isStatusCodeInternalOrServerError($this->exception->getCode()))
         ? $this->exception->getCode()
         : Response::HTTP_INTERNAL_SERVER_ERROR;
@@ -182,10 +173,6 @@ class LaravelApiProblem
 
     /**
      * Checks if the status code is of the integer type and is in the range of Client and Server Errors
-     *
-     * @param null|int $statusCode
-     *
-     * @return bool
      */
     protected function isStatusCodeInternalOrServerError(?int $statusCode): bool
     {
@@ -194,10 +181,6 @@ class LaravelApiProblem
 
     /**
      * Serialize the exception into an array
-     *
-     * @param \Throwable $throwable
-     *
-     * @return array
      */
     private function serializeException(\Throwable $throwable): array
     {
