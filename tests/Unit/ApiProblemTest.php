@@ -3,8 +3,6 @@
 declare(strict_types=1);
 
 use Pedrosalpr\LaravelApiProblem\Http\LaravelHttpApiProblem;
-use Pedrosalpr\LaravelApiProblem\Tests\TestCase;
-use function Pest\Laravel\{getJson, postJson};
 
 test('it can be instantiated with required arguments', function () {
     $problem = new LaravelHttpApiProblem(
@@ -64,7 +62,7 @@ test('it defaults status code to 400 if out of range', function (int $statusCode
 test('it includes extensions in the problem detail', function () {
     $extensions = [
         'trace_id' => '1a2b3c4d5e',
-        'app_code' => 'AUTH-001'
+        'app_code' => 'AUTH-001',
     ];
 
     $problem = new LaravelHttpApiProblem(

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Pedrosalpr\LaravelApiProblem\Tests\Handlers;
 
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Validation\ValidationException;
 use Pedrosalpr\LaravelApiProblem\Http\LaravelHttpApiProblem;
 use Throwable;
@@ -21,12 +21,14 @@ class TestExceptionHandler extends ExceptionHandler
 
         if ($e instanceof AuthenticationException) {
             $problem = new LaravelHttpApiProblem(Response::HTTP_UNAUTHORIZED, $e->getMessage(), $instance);
+
             return response()->json($problem->toArray(), $problem->getStatusCode())
                 ->withHeaders(['Content-Type' => $problem->getHeaderProblemJson()]);
         }
 
         if ($e instanceof AuthorizationException) {
             $problem = new LaravelHttpApiProblem(Response::HTTP_FORBIDDEN, $e->getMessage(), $instance);
+
             return response()->json($problem->toArray(), $problem->getStatusCode())
                 ->withHeaders(['Content-Type' => $problem->getHeaderProblemJson()]);
         }
@@ -36,6 +38,7 @@ class TestExceptionHandler extends ExceptionHandler
             $statusCode = $e->getStatusCode();
             $title = Response::$statusTexts[$statusCode] ?? 'Unknown Error';
             $problem = new LaravelHttpApiProblem($statusCode, $e->getMessage(), $instance, title: $title);
+
             return response()->json($problem->toArray(), $problem->getStatusCode())
                 ->withHeaders(['Content-Type' => $problem->getHeaderProblemJson()]);
         }
@@ -47,6 +50,7 @@ class TestExceptionHandler extends ExceptionHandler
                 instance: $instance,
                 extensions: ['errors' => $e->errors()]
             );
+
             return response()->json($problem->toArray(), $problem->getStatusCode())
                 ->withHeaders(['Content-Type' => $problem->getHeaderProblemJson()]);
         }

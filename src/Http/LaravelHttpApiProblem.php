@@ -72,7 +72,7 @@ class LaravelHttpApiProblem implements LaravelApiProblemInterface
         if ($this->statusCode < 400 || $this->statusCode > 599) {
             $this->statusCode = 400;
         }
-        if (!filter_var($this->type, FILTER_VALIDATE_URL) || empty($this->title)) {
+        if (! filter_var($this->type, FILTER_VALIDATE_URL) || empty($this->title)) {
             $this->title = $this->getTitleForStatusCode($this->statusCode);
             $this->type = self::TYPE_ABOUT_BLANK;
         }
@@ -118,7 +118,7 @@ class LaravelHttpApiProblem implements LaravelApiProblemInterface
                 'title' => $this->title,
                 'detail' => $this->detail,
                 'instance' => $this->instance,
-                'timestamp' => $this->timestamp->toJSON()
+                'timestamp' => $this->timestamp->toJSON(),
             ],
             $this->extensions
         );

@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-use function Pest\Laravel\{getJson, postJson};
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 use Pedrosalpr\LaravelApiProblem\Tests\Handlers\TestExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+
+use function Pest\Laravel\getJson;
+use function Pest\Laravel\postJson;
 
 // Antes de cada teste, substitua o manipulador de exceções do Laravel
 // pelo seu manipulador de exceções de teste.
@@ -82,8 +84,6 @@ test('not found exception returns 404 problem json', function () {
         ]);
 });
 
-
-
 test('method not allowed exception returns 405 problem json', function () {
     // Definir uma rota que só aceita POST
     Route::post('/api/only-post', fn () => ['message' => 'success']);
@@ -113,8 +113,6 @@ test('generic exception returns 500 problem json', function () {
             'detail' => 'An internal server error occurred.',
         ]);
 });
-
-
 
 test('http exception returns correct problem json', function () {
     Route::get('/api/custom-error', function () {
