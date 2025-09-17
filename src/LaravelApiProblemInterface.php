@@ -19,4 +19,6 @@ interface LaravelApiProblemInterface
     public function getExtensions(): array;
 
     public function getHeaderProblemJson(): string;
+
+    public function getInstance(): string;
 }

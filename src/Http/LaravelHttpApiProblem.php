@@ -99,6 +99,11 @@ class LaravelHttpApiProblem implements LaravelApiProblemInterface
         return $this->statusCode;
     }
 
+    public function getInstance(): string
+    {
+        return $this->instance;
+    }
+
     public function getExtensions(): array
     {
         return $this->extensions;
