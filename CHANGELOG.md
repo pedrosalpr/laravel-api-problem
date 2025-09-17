@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.4](https://github.com/pedrosalpr/laravel-api-problem/0.0.3...0.0.4) (2025-09-17)
+
+
+### Features
+
+* **laravel-api-problem:** add method getInstance ([f255a98](https://github.com/pedrosalpr/laravel-api-problem/commit/f255a9866cb4ab04cc85e5ea7876219c05ef47f8))
+
+
+### Bug Fixes
+
+* **laravel-api-problem:** fix exception AuthorizationException for status code 403 ([76ba543](https://github.com/pedrosalpr/laravel-api-problem/commit/76ba543fe0ce0991b7fc335de501620fd1649f2d))
+
+
+### Build
+
+* **composer:** upgrage for laravel 12 ([43f8f04](https://github.com/pedrosalpr/laravel-api-problem/commit/43f8f04df305421c9b6aa980a77bb327001e2872))
+
+
+### Test
+
+* **laravel-api-problem:** add feature and unit tests, and delete default tests package ([7032169](https://github.com/pedrosalpr/laravel-api-problem/commit/703216922d006a9190a672e040db4c90b6a5fae6))
+
 ## [0.0.3](https://github.com/pedrosalpr/laravel-api-problem/0.0.2...0.0.3) (2024-06-28)
 
 
