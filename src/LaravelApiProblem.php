@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pedrosalpr\LaravelApiProblem;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -32,6 +33,7 @@ class LaravelApiProblem
             ValidationException::class => $this->validation(),
             \UnhandledMatchError::class,\Exception::class => $this->default(),
             HttpException::class => $this->default(419),
+            AuthorizationException::class => $this->default(403),
             default => $this->default()
         };
     }
