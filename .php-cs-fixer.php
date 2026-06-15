@@ -48,7 +48,7 @@ return  $config->setUsingCache(false)
         ]],
         'no_unused_imports' => true,
         'no_whitespace_in_blank_line' => true,
-        'php_unit_internal_class' => [],
+        'php_unit_internal_class' => true,
         'php_unit_test_class_requires_covers' => false,
         'phpdoc_summary' => false,
         'return_assignment' => false,
@@ -57,7 +57,7 @@ return  $config->setUsingCache(false)
         'single_space_around_construct' => true,
         'single_trait_insert_per_statement' => false,
         'statement_indentation' => true,
-        'trailing_comma_in_multiline' => [],
+        'trailing_comma_in_multiline' => true,
         'no_superfluous_phpdoc_tags' => false,
         'yoda_style' => [
             'always_move_variable' => false,
