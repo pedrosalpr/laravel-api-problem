@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.5](https://github.com/pedrosalpr/laravel-api-problem/0.0.4...0.0.5) (2026-06-15)
+
+
+### Features
+
+* upgrade laravel 13 ([2ceb192](https://github.com/pedrosalpr/laravel-api-problem/commit/2ceb192c9aaf7afca9840e1c9124795eb1ff62e0))
+
 ## [0.0.4](https://github.com/pedrosalpr/laravel-api-problem/0.0.3...0.0.4) (2025-09-17)
 
 
