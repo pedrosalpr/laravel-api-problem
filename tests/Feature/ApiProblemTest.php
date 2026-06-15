@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 use Pedrosalpr\LaravelApiProblem\Tests\Handlers\TestExceptionHandler;
@@ -16,7 +17,7 @@ use function Pest\Laravel\postJson;
 // pelo seu manipulador de exceções de teste.
 beforeEach(function () {
     $this->app->singleton(
-        \Illuminate\Contracts\Debug\ExceptionHandler::class,
+        ExceptionHandler::class,
         TestExceptionHandler::class // Use sua classe de handler de teste aqui
     );
 });
